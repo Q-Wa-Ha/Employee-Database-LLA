@@ -19,13 +19,14 @@ int main(int argc, char *argv[]) {
     bool newFile = false;
     char *filepath = NULL;
     char *addString = NULL;
+    bool list = false;
 	int cmdArg;
 
     int dbfd = -1;
     struct dbheader_t *dbhdr = NULL;
     struct employee_t *employees = NULL;
 
-    while((cmdArg = getopt(argc, argv, "nf:a:")) != -1) {
+    while((cmdArg = getopt(argc, argv, "nf:a:l")) != -1) {
         switch(cmdArg) {
             case 'n':
                 newFile = true;
@@ -37,6 +38,10 @@ int main(int argc, char *argv[]) {
 
             case 'a':
                 addString = optarg;
+                break;
+
+            case 'l':
+                list = true;
                 break;
 
             case '?':
@@ -86,6 +91,10 @@ int main(int argc, char *argv[]) {
 
     if(addString) {
         add_employee(dbhdr, &employees, addString);
+    }
+
+    if(list) {
+        list_employees(dbhdr, employees);
     }
 
     output_file(dbfd, dbhdr, employees);

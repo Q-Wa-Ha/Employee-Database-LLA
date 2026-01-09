@@ -25,7 +25,7 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t **employees, char *
     char *hours = strtok(NULL, ",");
     if(hours == NULL) { return STATUS_ERROR; }
 
-    
+
     struct employee_t *e = *employees;
     e = realloc(e, sizeof(struct employee_t) * (dbhdr->count + 1));
     if(e == NULL) {
@@ -41,6 +41,15 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t **employees, char *
     *employees = e;
 
     return STATUS_SUCCESS;
+}
+
+void list_employees(struct dbheader_t *dbhdr, struct employee_t *employees) {
+    for(int i = 0; i < dbhdr->count; i++) {
+        printf("Employee %d\n", i);
+        printf("\tName: %s\n", employees[i].name);
+        printf("\tAddress: %s\n", employees[i].address);
+        printf("\tHours: %u\n", employees[i].hours);
+    }
 }
 
 int read_employees(int fd, struct dbheader_t *dbhdr, struct employee_t **employeesOut) {
