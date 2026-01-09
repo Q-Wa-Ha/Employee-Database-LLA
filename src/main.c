@@ -11,17 +11,21 @@ void print_usage(char *argv[]) {
     printf("Usage: %s -n -f <database file>\n", argv[0]);
     printf("\t -n  - create new database file\n");
     printf("\t -f  - (required) path to database file\n");
+    printf("\t -l  - list the employees\n");
+    printf("\t -a  - add via CSV list of (name,address,salary)\n");
 }
 
 int main(int argc, char *argv[]) { 
     bool newFile = false;
     char *filepath = NULL;
+    char *addString = NULL;
 	int cmdArg;
 
     int dbfd = -1;
     struct dbheader_t *dbhdr = NULL;
+    struct employee_t *employees = NULL;
 
-    while((cmdArg = getopt(argc, argv, "nf:")) != -1) {
+    while((cmdArg = getopt(argc, argv, "nf:a:")) != -1) {
         switch(cmdArg) {
             case 'n':
                 newFile = true;
@@ -29,6 +33,10 @@ int main(int argc, char *argv[]) {
             
             case 'f':
                 filepath = optarg;
+                break;
+
+            case 'a':
+                addString = optarg;
                 break;
 
             case '?':
@@ -71,7 +79,16 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    output_file(dbfd, dbhdr, NULL);
+    if(read_employees(dbfd, dbhdr, &employees) == STATUS_ERROR) {
+        printf("Failed to read employees\n");
+        return EXIT_FAILURE;
+    }
+
+    if(addString) {
+        add_employee(dbhdr, &employees, addString);
+    }
+
+    output_file(dbfd, dbhdr, employees);
 
     return EXIT_SUCCESS;
 }
