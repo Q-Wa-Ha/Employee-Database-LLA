@@ -6,6 +6,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "common.h"
 #include "parse.h"
@@ -39,6 +40,41 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t **employees, char *
     e[dbhdr->count - 1].hours = atoi(hours);
 
     *employees = e;
+
+    return STATUS_SUCCESS;
+}
+
+int remove_employee(struct dbheader_t* dbhdr, struct employee_t ** employeesOut, char *employeeName) {
+    if(dbhdr == NULL) {
+        return STATUS_ERROR;
+    }
+    if(employeesOut == NULL) {
+        return STATUS_ERROR;
+    }
+
+    struct employee_t *employees = *employeesOut;
+
+    if(employees == NULL) {
+        return STATUS_ERROR;
+    }
+
+
+    for(int i = 0; i < dbhdr->count; i++) {
+        while(strcmp(employeeName, employees[i].name) == 0) {
+            bool shifted = false;
+
+            for(int j = i; j < dbhdr->count - 1; j++) {
+                employees[j] = employees[j + 1];
+                shifted = true;
+            }
+
+            dbhdr->count--;
+
+            if(!shifted) {
+                break;
+            }
+        }
+    }
 
     return STATUS_SUCCESS;
 }

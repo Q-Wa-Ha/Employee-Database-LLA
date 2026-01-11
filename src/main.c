@@ -19,6 +19,7 @@ int main(int argc, char *argv[]) {
     bool newFile = false;
     char *filepath = NULL;
     char *addString = NULL;
+    char *removeName = NULL;
     bool list = false;
 	int cmdArg;
 
@@ -26,7 +27,7 @@ int main(int argc, char *argv[]) {
     struct dbheader_t *dbhdr = NULL;
     struct employee_t *employees = NULL;
 
-    while((cmdArg = getopt(argc, argv, "nf:a:l")) != -1) {
+    while((cmdArg = getopt(argc, argv, "nf:a:r:l")) != -1) {
         switch(cmdArg) {
             case 'n':
                 newFile = true;
@@ -38,6 +39,10 @@ int main(int argc, char *argv[]) {
 
             case 'a':
                 addString = optarg;
+                break;
+
+            case 'r':
+                removeName = optarg;
                 break;
 
             case 'l':
@@ -91,6 +96,10 @@ int main(int argc, char *argv[]) {
 
     if(addString) {
         add_employee(dbhdr, &employees, addString);
+    }
+
+    if(removeName) {
+        remove_employee(dbhdr, &employees, removeName);
     }
 
     if(list) {
