@@ -13,6 +13,8 @@ void print_usage(char *argv[]) {
     printf("\t -f  - (required) path to database file\n");
     printf("\t -l  - list the employees\n");
     printf("\t -a  - add via CSV list of (name,address,salary)\n");
+    printf("\t -r  - remove via name\n");
+    printf("\t -h  - edit hours via CSV list of (name,hours)\n");
 }
 
 int main(int argc, char *argv[]) { 
