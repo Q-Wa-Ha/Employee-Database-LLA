@@ -20,6 +20,7 @@ int main(int argc, char *argv[]) {
     char *filepath = NULL;
     char *addString = NULL;
     char *removeName = NULL;
+    char *editHours = NULL;
     bool list = false;
 	int cmdArg;
 
@@ -27,7 +28,7 @@ int main(int argc, char *argv[]) {
     struct dbheader_t *dbhdr = NULL;
     struct employee_t *employees = NULL;
 
-    while((cmdArg = getopt(argc, argv, "nf:a:r:l")) != -1) {
+    while((cmdArg = getopt(argc, argv, "nf:a:r:h:l")) != -1) {
         switch(cmdArg) {
             case 'n':
                 newFile = true;
@@ -43,6 +44,10 @@ int main(int argc, char *argv[]) {
 
             case 'r':
                 removeName = optarg;
+                break;
+
+            case 'h':
+                editHours = optarg;
                 break;
 
             case 'l':
@@ -100,6 +105,10 @@ int main(int argc, char *argv[]) {
 
     if(removeName) {
         remove_employee(dbhdr, &employees, removeName);
+    }
+
+    if(editHours) {
+        edit_employee_hours(dbhdr, &employees, editHours);
     }
 
     if(list) {
